@@ -1,0 +1,2424 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'Serverless CloudFormation Script has provision to create 15 Lambdas, 1 ApiGateway,2 S3 buckets,3 Step function,2 SQS, 10 Dynamo tables,1 Redis cache, 1 Kinesis Stream'
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      - Label:
+          default: Common Parameters
+        Parameters:
+          - System
+          - SubSystem
+          - RevenueStream
+          - KMSArn
+          - Bucket1Name
+          - Bucket2Name
+          - FriendlyDomainName
+      - Label:
+          default: Lambda Parameters
+        Parameters:
+          - FunctionName1
+          - FunctionName2
+          - FunctionName3
+          - FunctionName4
+          - FunctionName5
+          - FunctionName6
+          - FunctionName7
+          - FunctionName8
+          - FunctionName9
+          - FunctionName10
+          - FunctionName11
+          - FunctionName12
+          - FunctionName13
+          - FunctionName14
+          - FunctionName15                
+      - Label:
+          default: StepFunction Parameters
+        Parameters:
+          - StepFunctionName1
+          - StepFunctionName2
+          - StepFunctionName3
+      -
+        Label:
+          default: "Queue Parameters"
+        Parameters:
+          - QueueName1
+          - FifoQueue1
+          - QueueName2
+          - FifoQueue2         
+      - Label:
+          default: Kinesis Parameters
+        Parameters:
+          - KNS1StreamName          
+      - Label:
+          default: Dynamo Parameters
+        Parameters:
+          - TableName1
+          - T1PartitionKeyName
+          - T1PartitionKeyType
+          - T1SortKeyName
+          - T1SortKeyType
+          - TableName2
+          - T2PartitionKeyName
+          - T2PartitionKeyType
+          - T2SortKeyName
+          - T2SortKeyType
+          - TableName3
+          - T3PartitionKeyName
+          - T3PartitionKeyType
+          - T3SortKeyName
+          - T3SortKeyType
+          - TableName4
+          - T4PartitionKeyName
+          - T4PartitionKeyType
+          - T4SortKeyName
+          - T4SortKeyType
+          - TableName5
+          - T5PartitionKeyName
+          - T5PartitionKeyType
+          - T5SortKeyName
+          - T5SortKeyType
+          - TableName6
+          - T6PartitionKeyName
+          - T6SortKeyName
+          - TableName7
+          - T7PartitionKeyName
+          - T7SortKeyName
+          - TableName8
+          - T8PartitionKeyName
+          - T8SortKeyName          
+          - TableName9
+          - T9PartitionKeyName
+          - T9SortKeyName 
+          - TableName10
+          - T10PartitionKeyName
+          - T10SortKeyName           
+      - Label:
+          default: Redis Cache Parameters
+        Parameters:
+          - AuthToken
+          
+    ParameterLabels:            
+      System:
+        default: System
+      SubSystem:
+        default: SubSystem
+      RevenueStream:
+        default: Revenue Stream
+      FriendlyDomainName:
+        default: User-friendly api domain
+      Bucket1Name:
+        default: Bucket-1 Name
+      Bucket2Name:
+        default: Bucket-2 Name
+      FunctionName1:
+        default: Lambda-1 Name
+      FunctionName2:
+        default: Lambda-2 Name
+      FunctionName3:
+        default: Lambda-3 Name
+      FunctionName4:
+        default: Lambda-4 Name
+      FunctionName5:
+        default: Lambda-5 Name
+      FunctionName6:
+        default: Lambda-6 Name
+      FunctionName7:
+        default: Lambda-7 Name
+      FunctionName8:
+        default: Lambda-8 Name
+      FunctionName9:
+        default: Lambda-9 Name
+      FunctionName10:
+        default: Lambda-10 Name
+      FunctionName11:
+        default: Lambda-11 Name
+      FunctionName12:
+        default: Lambda-12 Name
+      FunctionName13:
+        default: Lambda-13 Name
+      FunctionName14:
+        default: Lambda-14 Name      
+      StepFunctionName1:
+        default: StepFunction Name
+      StepFunctionName2:
+        default: StepFunction Name
+      StepFunctionName3:
+        default: StepFunction Name        
+      TableName1:
+        default: DynamoDB-1 Name
+      T1PartitionKeyName:
+        default: PartitionKey-1 Name
+      T1PartitionKeyType:
+        default: PartitionKey-1 Type
+      T1SortKeyName:
+        default: SortKey-1 Name
+      T1SortKeyType:
+        default: SortKey-1 Type
+      TableName2:
+        default: DynamoDB-2 Name
+      T2PartitionKeyName:
+        default: PartitionKey-2 Name
+      T2PartitionKeyType:
+        default: PartitionKey-2 Type
+      T2SortKeyName:
+        default: SortKey-2 Name
+      T2SortKeyType:
+        default: SortKey-2 Type
+      TableName3:
+        default: DynamoDB-3 Name
+      T3PartitionKeyName:
+        default: PartitionKey-3 Name
+      T3PartitionKeyType:
+        default: PartitionKey-3 Type
+      T3SortKeyName:
+        default: SortKey-3 Name
+      T3SortKeyType:
+        default: SortKey-3 Type
+      TableName4:
+        default: DynamoDB-4 Name
+      T4PartitionKeyName:
+        default: PartitionKey-4 Name
+      T4PartitionKeyType:
+        default: PartitionKey-4 Type
+      T4SortKeyName:
+        default: SortKey-4 Name
+      T4SortKeyType:
+        default: SortKey-4 Type
+      TableName5:
+        default: DynamoDB-5 Name
+      T5PartitionKeyName:
+        default: PartitionKey-5 Name
+      T5PartitionKeyType:
+        default: PartitionKey-5 Type
+      T5SortKeyName:
+        default: SortKey-5 Name
+      T5SortKeyType:
+        default: SortKey-5 Type
+      TableName6:
+        default: DynamoDB-6 Name
+      T6PartitionKeyName:
+        default: PartitionKey-6 Name
+      T6SortKeyName:
+        default: SortKey-6 Name
+      TableName7:
+        default: DynamoDB-7 Name
+      T7PartitionKeyName:
+        default: PartitionKey-7 Name
+      T7SortKeyName:
+        default: SortKey-7 Name
+      TableName8:
+        default: DynamoDB-8 Name
+      T8PartitionKeyName:
+        default: PartitionKey-8 Name
+      T8SortKeyName:
+        default: SortKey-8 Name
+      TableName9:
+        default: DynamoDB-9 Name
+      T9PartitionKeyName:
+        default: PartitionKey-9 Name
+      T9SortKeyName:
+        default: SortKey-9 Name
+      TableName10:
+        default: DynamoDB-10 Name
+      T10PartitionKeyName:
+        default: PartitionKey-10 Name
+      T10SortKeyName:
+        default: SortKey-10 Name
+      QueueName1:
+        default: "Queue-1 Name"
+      QueueName2:
+        default: "Queue-2 Name"    
+      AuthToken :
+        default: "Redis Cache AuthToken"  
+      KNS1StreamName:
+        default: Kinesis Stream Name
+      KMSArn:
+        default: KMS ARN        
+Mappings:
+  SystemMapping:
+    SampleSystem:
+      IntSubnets:
+        - subnet-90705ccd
+        - subnet-14fff670
+        - subnet-c9250be6 
+      VpcId: vpc-7c368507      
+Parameters:  
+  System:
+    Type: String
+    Default: ''
+    Description: Enter System Name
+  SubSystem:
+    Type: String
+    Default: ''
+    Description: Enter SubSystem Name
+  RevenueStream:
+    Type: String
+    Default: ''
+    Description: Enter Revenue Stream Name
+  FunctionName1:
+    Type: String
+    Default: ''
+    Description: Enter 1st Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName2:
+    Type: String
+    Default: ''
+    Description: Enter 2nd Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName3:
+    Type: String
+    Default: ''
+    Description: Enter 3rd Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName4:
+    Type: String
+    Default: ''
+    Description: Enter 4th Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName5:
+    Type: String
+    Default: ''
+    Description: Enter 5th Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName6:
+    Type: String
+    Default: ''
+    Description: Enter 6th Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName7:
+    Type: String
+    Default: ''
+    Description: Enter 7th Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName8:
+    Type: String
+    Default: ''
+    Description: Enter 8th Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName9:
+    Type: String
+    Default: ''
+    Description: Enter 9th Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName10:
+    Type: String
+    Default: ''
+    Description: Enter 10th Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName11:
+    Type: String
+    Default: ''
+    Description: Enter 11th Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName12:
+    Type: String
+    Default: ''
+    Description: Enter 12th Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName13:
+    Type: String
+    Default: ''
+    Description: Enter 13th Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName14:
+    Type: String
+    Default: ''
+    Description: Enter 14th Lambda Function Name(Do not append System & Sub-System Name).
+  FunctionName15:
+    Type: String
+    Default: ''
+    Description: Enter 15th Lambda Function Name(Do not append System & Sub-System Name).  
+  StepFunctionName1:
+    Description: Enter StepFunction Name(Do not append System & Sub-System Name).
+    Type: String
+    Default: ''
+  StepFunctionName2:
+    Description: Enter StepFunction Name(Do not append System & Sub-System Name).
+    Type: String
+    Default: ''
+  StepFunctionName3:
+    Description: Enter StepFunction Name(Do not append System & Sub-System Name).
+    Type: String
+    Default: ''    
+  QueueName1:
+    Description: 'Enter 1st Queue Name(Do not append System & Sub-System Name).'
+    Type: String
+    Default: ''
+  FifoQueue1:
+    Type: String
+    Default: false
+    AllowedValues:
+      - false
+      - true
+  QueueName2:
+    Description: 'Enter 2nd Queue Name(Do not append System & Sub-System Name).'
+    Type: String
+    Default: ''
+  FifoQueue2:
+    Type: String
+    Default: false
+    AllowedValues:
+      - false
+      - true      
+  TableName1:
+    Description: Enter 1st Dynamo Table Name(Do not append System & Sub-System Name).
+    Type: String
+    Default: ''
+  T1PartitionKeyName:
+    Description: Enter 1st Dynamo Table Partition Key.
+    Type: String
+  T1PartitionKeyType:
+    Description: Enter 1st Dynamo Table Partition Key Type.
+    Type: String
+    Default: S
+    AllowedValues:
+      - S
+      - 'N'
+      - B
+  T1SortKeyName:
+    Description: Optional - Enter 1st Dynamo Table Sort Key.
+    Type: String
+    Default: ''
+  T1SortKeyType:
+    Description: Type of the sort key (if SortKey-1 Name is set).
+    Type: String
+    Default: S
+    AllowedValues:
+      - S
+      - 'N'
+      - B
+  TableName2:
+    Description: Enter 2nd Dynamo Table Name(Do not append System & Sub-System Name).
+    Type: String
+    Default: ''
+  T2PartitionKeyName:
+    Description: Enter 2nd Dynamo Table Partition Key.
+    Type: String
+  T2PartitionKeyType:
+    Description: Enter 2nd Dynamo Table Partition Key Type.
+    Type: String
+    Default: S
+    AllowedValues:
+      - S
+      - 'N'
+      - B
+  T2SortKeyName:
+    Description: Optional - Enter 2nd Dynamo Table Sort Key.
+    Type: String
+    Default: ''
+  T2SortKeyType:
+    Description: Type of the sort key (if SortKey-2 Name is set).
+    Type: String
+    Default: S
+    AllowedValues:
+      - S
+      - 'N'
+      - B
+  TableName3:
+    Description: Enter 3rd Dynamo Table Name(Do not append System & Sub-System Name).
+    Type: String
+    Default: ''
+  T3PartitionKeyName:
+    Description: Enter 3rd Dynamo Table Partition Key.
+    Type: String
+  T3PartitionKeyType:
+    Description: Enter 3rd Dynamo Table Partition Key Type.
+    Type: String
+    Default: S
+    AllowedValues:
+      - S
+      - 'N'
+      - B
+  T3SortKeyName:
+    Description: Optional - Enter 3rd Dynamo Table Sort Key.
+    Type: String
+    Default: ''
+  T3SortKeyType:
+    Description: Type of the sort key (if SortKey-3 Name is set).
+    Type: String
+    Default: S
+    AllowedValues:
+      - S
+      - 'N'
+      - B
+  TableName4:
+    Description: Enter 4th Dynamo Table Name(Do not append System & Sub-System Name).
+    Type: String
+    Default: ''
+  T4PartitionKeyName:
+    Description: Enter 4th Dynamo Table Partition Key.
+    Type: String
+  T4PartitionKeyType:
+    Description: Enter 4th Dynamo Table Partition Key Type.
+    Type: String
+    Default: S
+    AllowedValues:
+      - S
+      - 'N'
+      - B
+  T4SortKeyName:
+    Description: Optional - Enter 4th Dynamo Table Sort Key.
+    Type: String
+    Default: ''
+  T4SortKeyType:
+    Description: Type of the sort key (if SortKey-4 Name is set).
+    Type: String
+    Default: S
+    AllowedValues:
+      - S
+      - 'N'
+      - B
+  TableName5:
+    Description: Enter 5th Dynamo Table Name(Do not append System & Sub-System Name).
+    Type: String
+    Default: ''
+  T5PartitionKeyName:
+    Description: Enter 5th Dynamo Table Partition Key.
+    Type: String
+  T5PartitionKeyType:
+    Description: Enter 5th Dynamo Table Partition Key Type.
+    Type: String
+    Default: S
+    AllowedValues:
+      - S
+      - 'N'
+      - B
+  T5SortKeyName:
+    Description: Optional - Enter 5th Dynamo Table Sort Key.
+    Type: String
+    Default: ''
+  T5SortKeyType:
+    Description: Type of the sort key (if SortKey-5 Name is set).
+    Type: String
+    Default: S
+    AllowedValues:
+      - S
+      - 'N'
+      - B
+  TableName6:
+    Description: Enter 6th Dynamo Table Name(Do not append System & Sub-System Name).
+    Type: String
+    Default: ''
+  T6PartitionKeyName:
+    Description: Enter 6th Dynamo Table Partition Key.
+    Type: String
+    Default: ''    
+  T6SortKeyName:
+    Description: Optional - Enter 6th Dynamo Table Sort Key.
+    Type: String
+    Default: ''
+  TableName7:
+    Description: Enter 7th Dynamo Table Name(Do not append System & Sub-System Name).
+    Type: String
+    Default: ''
+  T7PartitionKeyName:
+    Description: Enter 7th Dynamo Table Partition Key.
+    Type: String
+    Default: ''    
+  T7SortKeyName:
+    Description: Optional - Enter 7th Dynamo Table Sort Key.
+    Type: String
+    Default: ''
+  TableName8:
+    Description: Enter 8th Dynamo Table Name(Do not append System & Sub-System Name).
+    Type: String
+    Default: ''
+  T8PartitionKeyName:
+    Description: Enter 8th Dynamo Table Partition Key.
+    Type: String
+    Default: ''    
+  T8SortKeyName:
+    Description: Optional - Enter 8th Dynamo Table Sort Key.
+    Type: String
+    Default: ''
+  TableName9:
+    Description: Enter 9th Dynamo Table Name(Do not append System & Sub-System Name).
+    Type: String
+    Default: ''
+  T9PartitionKeyName:
+    Description: Enter 9th Dynamo Table Partition Key.
+    Type: String
+    Default: ''    
+  T9SortKeyName:
+    Description: Optional - Enter 9th Dynamo Table Sort Key.
+    Type: String
+    Default: ''
+  TableName10:
+    Description: Enter 10th Dynamo Table Name(Do not append System & Sub-System Name).
+    Type: String
+    Default: ''
+  T10PartitionKeyName:
+    Description: Enter 10th Dynamo Table Partition Key.
+    Type: String
+    Default: ''    
+  T10SortKeyName:
+    Description: Optional - Enter 10th Dynamo Table Sort Key.
+    Type: String
+    Default: ''
+  LambdaRuntime:
+    Type: String
+    Default: nodejs14.x
+  Bucket1Name:
+    Type: String
+    Default: ''
+    Description: Enter Bucket-1 Name(Do not append crx-dev).
+  Bucket2Name:
+    Type: String
+    Default: ''
+    Description: Enter Bucket-2 Name(Do not append crx-dev).
+  FriendlyDomainName:
+    Type: String
+    Default: ''
+    Description: Enter user friendly domain that will be used for API-Gateway.
+  KNS1StreamName:
+    Type: String
+    Default: ''
+    Description: Enter the Kinesis Stream Name    
+  KMSArn:
+    Type: String
+    Description: Enter KMS ARN based on your subsystem.
+    Default: ''
+  AuthToken:
+    Description: >-
+      Password (16 to 128 characters) used to authenticate against Redis.
+      Requried when TransitEncryption = true. Leave blank to disable
+      password-protection.
+    Type: String
+    Default: ''
+    MaxLength: 128 
+  HostedZoneName:
+    Description: The route53 HostedZoneName. For example, "mydomain.com."  Don't forget the period at the end.
+    Type: String
+    Default: 'mydomain.com.'    
+Conditions:
+  HasSortKey1: !Not 
+    - !Equals 
+      - !Ref T1SortKeyName
+      - ''
+  HasSortKey2: !Not 
+    - !Equals 
+      - !Ref T2SortKeyName
+      - ''
+  HasSortKey3: !Not 
+    - !Equals 
+      - !Ref T3SortKeyName
+      - ''
+  HasSortKey4: !Not 
+    - !Equals 
+      - !Ref T4SortKeyName
+      - ''
+  HasSortKey5: !Not 
+    - !Equals 
+      - !Ref T5SortKeyName
+      - ''
+  HasSortKey6: !Not 
+    - !Equals 
+      - !Ref T6SortKeyName
+      - ''
+  HasSortKey7: !Not 
+    - !Equals 
+      - !Ref T7SortKeyName
+      - ''
+  HasSortKey8: !Not 
+    - !Equals 
+      - !Ref T8SortKeyName
+      - ''
+  HasSortKey9: !Not 
+    - !Equals 
+      - !Ref T9SortKeyName
+      - ''
+  HasSortKey10: !Not 
+    - !Equals 
+      - !Ref T10SortKeyName
+      - ''      
+  HasTableName1: !Not 
+    - !Equals 
+      - !Ref TableName1
+      - ''
+  HasTableName2: !Not 
+    - !Equals 
+      - !Ref TableName2
+      - ''
+  HasTableName3: !Not 
+    - !Equals 
+      - !Ref TableName3
+      - ''
+  HasTableName4: !Not 
+    - !Equals 
+      - !Ref TableName4
+      - ''
+  HasTableName5: !Not 
+    - !Equals 
+      - !Ref TableName5
+      - ''
+  HasTableName6: !Not 
+    - !Equals 
+      - !Ref TableName6
+      - ''
+  HasTableName7: !Not 
+    - !Equals 
+      - !Ref TableName7
+      - ''
+  HasTableName8: !Not 
+    - !Equals 
+      - !Ref TableName8
+      - ''     
+  HasTableName9: !Not 
+    - !Equals 
+      - !Ref TableName9
+      - ''     
+  HasTableName10: !Not 
+    - !Equals 
+      - !Ref TableName10
+      - ''      
+  HasFunctionName1: !Not 
+    - !Equals 
+      - !Ref FunctionName1
+      - ''
+  HasFunctionName2: !Not 
+    - !Equals 
+      - !Ref FunctionName2
+      - ''
+  HasFunctionName3: !Not 
+    - !Equals 
+      - !Ref FunctionName3
+      - ''
+  HasFunctionName4: !Not 
+    - !Equals 
+      - !Ref FunctionName4
+      - ''
+  HasFunctionName5: !Not 
+    - !Equals 
+      - !Ref FunctionName5
+      - ''
+  HasFunctionName6: !Not 
+    - !Equals 
+      - !Ref FunctionName6
+      - ''
+  HasFunctionName7: !Not 
+    - !Equals 
+      - !Ref FunctionName7
+      - ''
+  HasFunctionName8: !Not 
+    - !Equals 
+      - !Ref FunctionName8
+      - ''
+  HasFunctionName9: !Not 
+    - !Equals 
+      - !Ref FunctionName9
+      - ''
+  HasFunctionName10: !Not 
+    - !Equals 
+      - !Ref FunctionName10
+      - ''
+  HasFunctionName11: !Not 
+    - !Equals 
+      - !Ref FunctionName11
+      - ''
+  HasFunctionName12: !Not 
+    - !Equals 
+      - !Ref FunctionName12
+      - ''
+  HasFunctionName13: !Not 
+    - !Equals 
+      - !Ref FunctionName13
+      - ''
+  HasFunctionName14: !Not 
+    - !Equals 
+      - !Ref FunctionName14
+      - ''
+  HasFunctionName15: !Not 
+    - !Equals 
+      - !Ref FunctionName15
+      - ''
+  HasStepFunctionName1: !Not 
+    - !Equals 
+      - !Ref StepFunctionName1
+      - ''
+  HasStepFunctionName2: !Not 
+    - !Equals 
+      - !Ref StepFunctionName2
+      - ''
+  HasStepFunctionName3: !Not 
+    - !Equals 
+      - !Ref StepFunctionName3
+      - ''      
+  HasBucket1Name: !Not 
+    - !Equals 
+      - !Ref Bucket1Name
+      - ''
+  HasBucket2Name: !Not 
+    - !Equals 
+      - !Ref Bucket2Name
+      - ''
+  HasQueueName1: !Not [!Equals [!Ref QueueName1, '']]
+  IsFifoQueue1: !Equals 
+    - !Ref FifoQueue1
+    - true
+  HasQueueName2: !Not [!Equals [!Ref QueueName2, '']]
+  IsFifoQueue2: !Equals 
+    - !Ref FifoQueue2
+    - true    
+  HasRedisAuthToken: !Not 
+    - !Equals 
+      - !Ref AuthToken
+      - '' 
+  HasUserFriendlyName: !And
+    - !Not [!Equals [!Ref FriendlyDomainName, '']]
+    - !Not [!Equals [!Ref FunctionName1, '']]
+  HasKNS1: !Not 
+    - !Equals 
+      - !Ref KNS1StreamName
+      - ''  
+Resources:
+  StepFunction1:
+    Type: 'AWS::StepFunctions::StateMachine'
+    Condition: HasStepFunctionName1    
+    Properties:
+      StateMachineName: !Sub '${System}-${SubSystem}-${StepFunctionName1}'
+      DefinitionString: !Sub |
+        {
+          "StartAt": "HelloWorld",
+          "States": {
+            "HelloWorld": {
+              "Type": "Pass",
+              "Result": "Hello World!",
+              "End": true
+            }
+          }
+        }
+      RoleArn: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${StepFunctionName1}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  StepFunction2:
+    Type: 'AWS::StepFunctions::StateMachine'
+    Condition: HasStepFunctionName2   
+    Properties:
+      StateMachineName: !Sub '${System}-${SubSystem}-${StepFunctionName2}'
+      DefinitionString: !Sub |
+        {
+          "StartAt": "HelloWorld",
+          "States": {
+            "HelloWorld": {
+              "Type": "Pass",
+              "Result": "Hello World!",
+              "End": true
+            }
+          }
+        }
+      RoleArn: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${StepFunctionName2}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  StepFunction3:
+    Type: 'AWS::StepFunctions::StateMachine'
+    Condition: HasStepFunctionName3
+    Properties:
+      StateMachineName: !Sub '${System}-${SubSystem}-${StepFunctionName3}'
+      DefinitionString: !Sub |
+        {
+          "StartAt": "HelloWorld",
+          "States": {
+            "HelloWorld": {
+              "Type": "Pass",
+              "Result": "Hello World!",
+              "End": true
+            }
+          }
+        }
+      RoleArn: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${StepFunctionName3}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+
+  Queue1:
+    Type: 'AWS::SQS::Queue'
+    Condition : HasQueueName1 
+    Properties:
+      QueueName: !If
+        - IsFifoQueue1
+        - !Sub '${System}-${SubSystem}-${QueueName1}.fifo'
+        - !Sub '${System}-${SubSystem}-${QueueName1}'        
+      DelaySeconds: 0
+      MaximumMessageSize: 262144
+      MessageRetentionPeriod: 1209600
+      ReceiveMessageWaitTimeSeconds: 0
+      KmsDataKeyReusePeriodSeconds: 86400
+      VisibilityTimeout: 30
+      FifoQueue: !If
+        - IsFifoQueue1
+        - true
+        - !Ref AWS::NoValue
+      KmsMasterKeyId: !Ref KMSArn
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${QueueName1}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Queue2:
+    Type: 'AWS::SQS::Queue'
+    Condition : HasQueueName2
+    Properties:
+      QueueName: !If
+        - IsFifoQueue2
+        - !Sub '${System}-${SubSystem}-${QueueName2}.fifo'
+        - !Sub '${System}-${SubSystem}-${QueueName2}'        
+      DelaySeconds: 0
+      MaximumMessageSize: 262144
+      MessageRetentionPeriod: 1209600
+      ReceiveMessageWaitTimeSeconds: 0
+      KmsDataKeyReusePeriodSeconds: 86400
+      VisibilityTimeout: 30
+      FifoQueue: !If
+        - IsFifoQueue2
+        - true
+        - !Ref AWS::NoValue
+      KmsMasterKeyId: !Ref KMSArn
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${QueueName2}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment          
+  Bucket1:
+    Type: 'AWS::S3::Bucket'
+    Condition: HasBucket1Name
+    Properties:
+      BucketName: !Sub 'tezs-dev-${Bucket1Name}'
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: 'aws:kms'
+              KMSMasterKeyID: !Ref KMSArn
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: Environment
+          Value: Development
+        - Key: RevenueStream
+          Value: !Ref RevenueStream
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Key: Name
+          Value: !Sub 'tezs-dev-${Bucket1Name}'
+  Bucket2:
+    Type: 'AWS::S3::Bucket'
+    Condition: HasBucket2Name
+    Properties:
+      BucketName: !Sub 'tezs-dev-${Bucket2Name}'
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: 'aws:kms'
+              KMSMasterKeyID: !Ref KMSArn
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: Environment
+          Value: Development
+        - Key: RevenueStream
+          Value: !Ref RevenueStream
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Key: Name
+          Value: !Sub 'tezs-dev-${Bucket2Name}'
+  DynamoDB1:
+    Type: 'AWS::DynamoDB::Table'
+    Condition: HasTableName1
+    Properties:
+      TableName: !Sub '${System}-${SubSystem}-${TableName1}'
+      AttributeDefinitions: !If 
+        - HasSortKey1
+        - - AttributeName: !Ref T1PartitionKeyName
+            AttributeType: !Ref T1PartitionKeyType
+          - AttributeName: !Ref T1SortKeyName
+            AttributeType: !Ref T1SortKeyType
+        - - AttributeName: !Ref T1PartitionKeyName
+            AttributeType: !Ref T1PartitionKeyType
+      BillingMode: PAY_PER_REQUEST
+      KeySchema: !If 
+        - HasSortKey1
+        - - AttributeName: !Ref T1PartitionKeyName
+            KeyType: HASH
+          - AttributeName: !Ref T1SortKeyName
+            KeyType: RANGE
+        - - AttributeName: !Ref T1PartitionKeyName
+            KeyType: HASH
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${TableName1}'
+          Key: Name
+        - Value: !Ref System
+          Key: System
+        - Value: !Ref SubSystem
+          Key: SubSystem
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+        - Value: Daily-Backup
+          Key: No
+  DynamoDB2:
+    Type: 'AWS::DynamoDB::Table'
+    Condition: HasTableName2
+    Properties:
+      TableName: !Sub '${System}-${SubSystem}-${TableName2}'
+      AttributeDefinitions: !If 
+        - HasSortKey2
+        - - AttributeName: !Ref T2PartitionKeyName
+            AttributeType: !Ref T2PartitionKeyType
+          - AttributeName: !Ref T2SortKeyName
+            AttributeType: !Ref T2SortKeyType
+        - - AttributeName: !Ref T2PartitionKeyName
+            AttributeType: !Ref T2PartitionKeyType
+      BillingMode: PAY_PER_REQUEST
+      KeySchema: !If 
+        - HasSortKey2
+        - - AttributeName: !Ref T2PartitionKeyName
+            KeyType: HASH
+          - AttributeName: !Ref T2SortKeyName
+            KeyType: RANGE
+        - - AttributeName: !Ref T2PartitionKeyName
+            KeyType: HASH
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${TableName2}'
+          Key: Name
+        - Value: !Ref System
+          Key: System
+        - Value: !Ref SubSystem
+          Key: SubSystem
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+        - Value: Daily-Backup
+          Key: No          
+  DynamoDB3:
+    Type: 'AWS::DynamoDB::Table'
+    Condition: HasTableName3
+    Properties:
+      TableName: !Sub '${System}-${SubSystem}-${TableName3}'
+      AttributeDefinitions: !If 
+        - HasSortKey3
+        - - AttributeName: !Ref T3PartitionKeyName
+            AttributeType: !Ref T3PartitionKeyType
+          - AttributeName: !Ref T3SortKeyName
+            AttributeType: !Ref T3SortKeyType
+        - - AttributeName: !Ref T3PartitionKeyName
+            AttributeType: !Ref T3PartitionKeyType
+      BillingMode: PAY_PER_REQUEST
+      KeySchema: !If 
+        - HasSortKey3
+        - - AttributeName: !Ref T3PartitionKeyName
+            KeyType: HASH
+          - AttributeName: !Ref T3SortKeyName
+            KeyType: RANGE
+        - - AttributeName: !Ref T3PartitionKeyName
+            KeyType: HASH
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${TableName3}'
+          Key: Name
+        - Value: !Ref System
+          Key: System
+        - Value: !Ref SubSystem
+          Key: SubSystem
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+        - Value: Daily-Backup
+          Key: No          
+  DynamoDB4:
+    Type: 'AWS::DynamoDB::Table'
+    Condition: HasTableName4
+    Properties:
+      TableName: !Sub '${System}-${SubSystem}-${TableName4}'
+      AttributeDefinitions: !If 
+        - HasSortKey4
+        - - AttributeName: !Ref T4PartitionKeyName
+            AttributeType: !Ref T4PartitionKeyType
+          - AttributeName: !Ref T4SortKeyName
+            AttributeType: !Ref T4SortKeyType
+        - - AttributeName: !Ref T4PartitionKeyName
+            AttributeType: !Ref T4PartitionKeyType
+      BillingMode: PAY_PER_REQUEST
+      KeySchema: !If 
+        - HasSortKey4
+        - - AttributeName: !Ref T4PartitionKeyName
+            KeyType: HASH
+          - AttributeName: !Ref T4SortKeyName
+            KeyType: RANGE
+        - - AttributeName: !Ref T4PartitionKeyName
+            KeyType: HASH
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${TableName4}'
+          Key: Name
+        - Value: !Ref System
+          Key: System
+        - Value: !Ref SubSystem
+          Key: SubSystem
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+        - Value: Daily-Backup
+          Key: No          
+  DynamoDB5:
+    Type: 'AWS::DynamoDB::Table'
+    Condition: HasTableName5
+    Properties:
+      TableName: !Sub '${System}-${SubSystem}-${TableName5}'
+      AttributeDefinitions: !If 
+        - HasSortKey5
+        - - AttributeName: !Ref T5PartitionKeyName
+            AttributeType: !Ref T5PartitionKeyType
+          - AttributeName: !Ref T5SortKeyName
+            AttributeType: !Ref T5SortKeyType
+        - - AttributeName: !Ref T5PartitionKeyName
+            AttributeType: !Ref T5PartitionKeyType
+      BillingMode: PAY_PER_REQUEST
+      KeySchema: !If 
+        - HasSortKey5
+        - - AttributeName: !Ref T5PartitionKeyName
+            KeyType: HASH
+          - AttributeName: !Ref T5SortKeyName
+            KeyType: RANGE
+        - - AttributeName: !Ref T5PartitionKeyName
+            KeyType: HASH
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${TableName5}'
+          Key: Name
+        - Value: !Ref System
+          Key: System
+        - Value: !Ref SubSystem
+          Key: SubSystem
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+        - Value: Daily-Backup
+          Key: No          
+  DynamoDB6:
+    Type: 'AWS::DynamoDB::Table'
+    Condition: HasTableName6
+    Properties:
+      TableName: !Sub '${System}-${SubSystem}-${TableName6}'
+      AttributeDefinitions: !If 
+        - HasSortKey6
+        - - AttributeName: !Ref T6PartitionKeyName
+            AttributeType: 'S'
+          - AttributeName: !Ref T6SortKeyName
+            AttributeType: 'S'
+        - - AttributeName: !Ref T6PartitionKeyName
+            AttributeType: 'S'
+      BillingMode: PAY_PER_REQUEST
+      KeySchema: !If 
+        - HasSortKey6
+        - - AttributeName: !Ref T6PartitionKeyName
+            KeyType: HASH
+          - AttributeName: !Ref T6SortKeyName
+            KeyType: RANGE
+        - - AttributeName: !Ref T6PartitionKeyName
+            KeyType: HASH
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${TableName6}'
+          Key: Name
+        - Value: !Ref System
+          Key: System
+        - Value: !Ref SubSystem
+          Key: SubSystem
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+        - Value: Daily-Backup
+          Key: No
+  DynamoDB7:
+    Type: 'AWS::DynamoDB::Table'
+    Condition: HasTableName7
+    Properties:
+      TableName: !Sub '${System}-${SubSystem}-${TableName7}'
+      AttributeDefinitions: !If 
+        - HasSortKey7
+        - - AttributeName: !Ref T7PartitionKeyName
+            AttributeType: 'S'
+          - AttributeName: !Ref T7SortKeyName
+            AttributeType: 'S'
+        - - AttributeName: !Ref T7PartitionKeyName
+            AttributeType: 'S'
+      BillingMode: PAY_PER_REQUEST
+      KeySchema: !If 
+        - HasSortKey7
+        - - AttributeName: !Ref T7PartitionKeyName
+            KeyType: HASH
+          - AttributeName: !Ref T7SortKeyName
+            KeyType: RANGE
+        - - AttributeName: !Ref T7PartitionKeyName
+            KeyType: HASH
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${TableName7}'
+          Key: Name
+        - Value: !Ref System
+          Key: System
+        - Value: !Ref SubSystem
+          Key: SubSystem
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+        - Value: Daily-Backup
+          Key: No
+  DynamoDB8:
+    Type: 'AWS::DynamoDB::Table'
+    Condition: HasTableName8
+    Properties:
+      TableName: !Sub '${System}-${SubSystem}-${TableName8}'
+      AttributeDefinitions: !If 
+        - HasSortKey8
+        - - AttributeName: !Ref T8PartitionKeyName
+            AttributeType: 'S'
+          - AttributeName: !Ref T8SortKeyName
+            AttributeType: 'S'
+        - - AttributeName: !Ref T8PartitionKeyName
+            AttributeType: 'S'
+      BillingMode: PAY_PER_REQUEST
+      KeySchema: !If 
+        - HasSortKey8
+        - - AttributeName: !Ref T8PartitionKeyName
+            KeyType: HASH
+          - AttributeName: !Ref T8SortKeyName
+            KeyType: RANGE
+        - - AttributeName: !Ref T8PartitionKeyName
+            KeyType: HASH
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${TableName8}'
+          Key: Name
+        - Value: !Ref System
+          Key: System
+        - Value: !Ref SubSystem
+          Key: SubSystem
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+        - Value: Daily-Backup
+          Key: No
+  DynamoDB9:
+    Type: 'AWS::DynamoDB::Table'
+    Condition: HasTableName9
+    Properties:
+      TableName: !Sub '${System}-${SubSystem}-${TableName9}'
+      AttributeDefinitions: !If 
+        - HasSortKey9
+        - - AttributeName: !Ref T9PartitionKeyName
+            AttributeType: 'S'
+          - AttributeName: !Ref T9SortKeyName
+            AttributeType: 'S'
+        - - AttributeName: !Ref T9PartitionKeyName
+            AttributeType: 'S'
+      BillingMode: PAY_PER_REQUEST
+      KeySchema: !If 
+        - HasSortKey9
+        - - AttributeName: !Ref T9PartitionKeyName
+            KeyType: HASH
+          - AttributeName: !Ref T9SortKeyName
+            KeyType: RANGE
+        - - AttributeName: !Ref T9PartitionKeyName
+            KeyType: HASH
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${TableName9}'
+          Key: Name
+        - Value: !Ref System
+          Key: System
+        - Value: !Ref SubSystem
+          Key: SubSystem
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+        - Value: Daily-Backup
+          Key: No
+  DynamoDB10:
+    Type: 'AWS::DynamoDB::Table'
+    Condition: HasTableName10
+    Properties:
+      TableName: !Sub '${System}-${SubSystem}-${TableName10}'
+      AttributeDefinitions: !If 
+        - HasSortKey10
+        - - AttributeName: !Ref T10PartitionKeyName
+            AttributeType: 'S'
+          - AttributeName: !Ref T10SortKeyName
+            AttributeType: 'S'
+        - - AttributeName: !Ref T10PartitionKeyName
+            AttributeType: 'S'
+      BillingMode: PAY_PER_REQUEST
+      KeySchema: !If 
+        - HasSortKey10
+        - - AttributeName: !Ref T10PartitionKeyName
+            KeyType: HASH
+          - AttributeName: !Ref T10SortKeyName
+            KeyType: RANGE
+        - - AttributeName: !Ref T10PartitionKeyName
+            KeyType: HASH
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${TableName10}'
+          Key: Name
+        - Value: !Ref System
+          Key: System
+        - Value: !Ref SubSystem
+          Key: SubSystem
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+        - Value: Daily-Backup
+          Key: No
+
+  LambdaSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Condition: HasFunctionName1
+    Properties:
+      GroupName: !Sub 'SG-Dev-${System}-${SubSystem}'
+      VpcId: !FindInMap 
+        - SystemMapping
+        - !Ref System
+        - VpcId
+      GroupDescription: !Sub 'SG-${System}-${SubSystem}-Lambda Security Group'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 10.10.16.0/20
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Environment
+          Value: Development
+        - Key: RevenueStream
+          Value: Affordability
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Key: Name
+          Value: !Sub 'SG-Dev-${System}-${SubSystem}'
+  Lambda1:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName1
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      Description: Lambda 1 Description
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName1}'
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active      
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName1}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda2:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName2
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      Description: Lambda 2 Description
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName2}'
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName2}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda3:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName3
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      Description: Lambda 3 Description
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName3}'
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName3}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda4:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName4
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      Description: Lambda 4 Description
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName4}'
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName4}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda5:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName5
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName5}'
+      Description: Lambda 5 Description
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName5}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda6:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName6
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      Description: Lambda 6 Description
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName6}'
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName6}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda7:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName7
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      Description: Lambda 7 Description
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName7}'
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName7}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda8:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName8
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      Description: Lambda 8 Description
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName8}'
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName8}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda9:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName9
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      Description: Lambda 9 Description
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName9}'
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName9}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda10:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName10
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName10}'
+      Description: Lambda 10 Description
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName10}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda11:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName11
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      Description: Lambda 11 Description
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName11}'
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName11}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda12:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName12
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      Description: Lambda 12 Description
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName12}'
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName12}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda13:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName13
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      Description: Lambda 13 Description
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName13}'
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName13}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda14:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName14
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      Description: Lambda 14 Description
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName14}'
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName14}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  Lambda15:
+    Type: 'AWS::Lambda::Function'
+    Condition: HasFunctionName15
+    DependsOn:
+      - LambdaExecutionRole
+      - ManagedApiPolicy
+    Properties:
+      FunctionName: !Sub '${System}-${SubSystem}-${FunctionName15}'
+      Description: Lambda 15 Description
+      Handler: index.handler
+      Code:
+        S3Bucket: crx-dev-deployments
+        S3Key: SampleSystem/SampleSubSystem/lambda/Template.zip
+      Role: !GetAtt 
+        - LambdaExecutionRole
+        - Arn
+      Runtime: !Ref LambdaRuntime
+      TracingConfig: 
+        Mode: Active
+      Timeout: '30'
+      MemorySize: 512
+      Environment:
+        Variables:
+          parameterPath: !Sub '/tezs/${System}/${SubSystem}/'
+          region: !Ref 'AWS::Region'
+      VpcConfig:
+        SubnetIds:
+          !FindInMap 
+          - SystemMapping
+          - !Ref System
+          - IntSubnets
+        SecurityGroupIds:
+          - !GetAtt 
+            - LambdaSecurityGroup
+            - GroupId
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-${FunctionName15}'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  
+
+  LambdaExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Condition: HasFunctionName1
+    Properties:
+      RoleName: !Sub '${System}-${SubSystem}'
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+                - states.amazonaws.com
+                - events.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+  ManagedApiPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Condition: HasFunctionName1
+    Properties:
+      ManagedPolicyName: !Sub '${System}-${SubSystem}'
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: all
+            Effect: Allow
+            Action:
+              - 'ec2:CreateNetworkInterface'
+              - 'ec2:Describe*'
+              - 'ec2:Get*'
+              - 'ec2:DeleteNetworkInterface'
+              - 'dynamodb:ListTables'
+              - 'dynamodb:PurchaseReservedCapacityOfferings'
+              - 'dynamodb:ListTagsOfResource'
+              - 'dynamodb:DescribeReservedCapacityOfferings'
+              - 'dynamodb:TagResource'
+              - 'dynamodb:DescribeLimits'
+              - 'dynamodb:UntagResource'
+              - 'dynamodb:ListBackups'
+              - 'dynamodb:ListStreams'
+              - 'dynamodb:ListGlobalTables'
+              - 'dynamodb:DescribeTimeToLive'
+              - 'dynamodb:DescribeReservedCapacity'
+              - 'kms:GenerateDataKey'
+              - 'kms:ListAliases'
+              - 'kms:ListKeys'
+              - 'kms:ReEncryptTo'
+              - 'kms:CreateKey'
+              - 'kms:GenerateRandom'
+              - 'kms:ReEncryptFrom'
+              - 'logs:CreateLogGroup'
+              - 'logs:PutLogEvents'
+              - 'logs:CreateLogStream'
+              - 'ssm:DescribeParameters'
+              - 's3:List*'
+              - 'states:ListStateMachines'
+              - 'states:CreateActivity'
+              - 'states:SendTaskFailure'
+              - 'states:CreateStateMachine'
+              - 'states:ListActivities'
+              - 'states:StopExecution'
+              - 'states:SendTaskSuccess'
+              - 'states:SendTaskHeartbeat'  
+              - 'xray:Put*'
+              - 'xray:BatchGet*'  
+              - 'kinesis:Describe*'             
+              - 'kinesis:List*'               
+            Resource: '*'
+          - Sid: kinesis
+            Effect: Allow
+            Action:
+              - 'kinesis:PutRecord'
+              - 'kinesis:Get*'
+              - 'kinesis:DeregisterStreamConsumer'
+              - 'kinesis:PutRecords'
+            Resource:
+              - !Join 
+                - ''
+                - - 'arn:aws:kinesis:'
+                  - !Ref 'AWS::Region'
+                  - ':'
+                  - !Ref 'AWS::AccountId'
+                  - ':*/'
+                  - !Sub '${System}-${SubSystem}-*/consumer/*:*'
+              - !Join 
+                - ''
+                - - 'arn:aws:kinesis:'
+                  - !Ref 'AWS::Region'
+                  - ':'
+                  - !Ref 'AWS::AccountId'
+                  - ':stream/'
+                  - !Sub '${System}-${SubSystem}-*'            
+          - Sid: s3
+            Effect: Allow
+            Action:
+              - 's3:List*'
+            Resource:
+              - !Join 
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Sub 'crx-dev-${Bucket1Name}'
+                  - /*
+              - !Join 
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Sub 'crx-dev-${Bucket2Name}'
+                  - /*
+          - Sid: ssm
+            Effect: Allow
+            Action:
+              - 'ssm:GetParametersByPath'
+              - 'ssm:GetParameters'
+              - 'ssm:GetParameter'
+            Resource:
+              - !Join 
+                - ''
+                - - 'arn:aws:ssm:'
+                  - !Ref 'AWS::Region'
+                  - ':'
+                  - !Ref 'AWS::AccountId'
+                  - ':parameter/crx/'
+                  - !Sub '${System}/${SubSystem}*'
+          - Sid: kms
+            Effect: Allow
+            Action: 'kms:*'
+            Resource:
+              - !Ref KMSArn
+              - !Join 
+                - ''
+                - - 'arn:aws:kms:'
+                  - !Ref 'AWS::Region'
+                  - ':'
+                  - !Ref 'AWS::AccountId'
+                  - ':alias/'
+                  - !Sub '${System}-${SubSystem}'
+          - Sid: sqs
+            Effect: Allow
+            Action: 'sqs:List*'            
+            Resource: !Join 
+              - ''
+              - - 'arn:aws:sqs:'
+                - !Ref 'AWS::Region'
+                - ':'
+                - !Ref 'AWS::AccountId'
+                - ':'
+                - !Sub '${System}-${SubSystem}-*'
+          - Sid: xray
+            Effect: Allow
+            Action:
+              - 'xray:Create*'
+              - 'xray:Update*'
+              - 'xray:Get*'
+            Resource:
+              - !Join 
+                - ''
+                - - 'arn:aws:xray:'
+                  - !Ref 'AWS::Region'
+                  - ':'
+                  - !Ref 'AWS::AccountId'
+                  - ':group/*/*'                
+          - Sid: dynamo
+            Effect: Allow
+            Action: 'dynamodb:List*'
+            Resource:
+              - !Join 
+                - ''
+                - - 'arn:aws:dynamodb:'
+                  - !Ref 'AWS::Region'
+                  - ':'
+                  - !Ref 'AWS::AccountId'
+                  - ':table/'
+                  - !Sub '${System}-${SubSystem}-*/stream/*'
+              - !Join 
+                - ''
+                - - 'arn:aws:dynamodb:'
+                  - !Ref 'AWS::Region'
+                  - ':'
+                  - !Ref 'AWS::AccountId'
+                  - ':table/'
+                  - !Sub '${System}-${SubSystem}-*/backup/*'
+              - !Join 
+                - ''
+                - - 'arn:aws:dynamodb:'
+                  - ':'
+                  - !Ref 'AWS::AccountId'
+                  - '::global-table/'
+                  - !Sub '${System}-${SubSystem}-*'
+              - !Join 
+                - ''
+                - - 'arn:aws:dynamodb:'
+                  - !Ref 'AWS::Region'
+                  - ':'
+                  - !Ref 'AWS::AccountId'
+                  - ':table/'
+                  - !Sub '${System}-${SubSystem}-*'
+      Roles:
+        - !Ref LambdaExecutionRole
+  KinesisStream1:
+    Type: 'AWS::Kinesis::Stream'
+    Condition: HasKNS1
+    Properties:
+      Name: !Sub '${System}-${SubSystem}-${KNS1StreamName}'
+      ShardCount: 1
+      StreamEncryption:
+        EncryptionType: KMS
+        KeyId: !Ref KMSArn
+      Tags:
+        - Key: Environment
+          Value: Development
+        - Key: RevenueStream
+          Value: Affordability
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Key: Name
+          Value: !Sub '${System}-${SubSystem}-${KNS1StreamName}'
+  SampleApi:
+    Type: 'AWS::ApiGateway::RestApi'
+    Condition: HasFunctionName1
+    Properties:
+      Name: !Sub '${System}-${SubSystem}'
+      Description: !Sub '${System}-${SubSystem}-API'
+      FailOnWarnings: true
+      Body:
+        swagger: '2.0'
+        info:
+          version: '1.0'
+          title: !Sub '${System}-${SubSystem}'
+        host: 12345.execute-api.us-east-1.amazonaws.com
+        basePath: /dev
+        schemes:
+          - https
+        paths:
+          /:
+            post:
+              responses: {}
+              x-amazon-apigateway-integration:
+                uri: !Join 
+                  - ''
+                  - - 'arn:aws:apigateway:'
+                    - !Ref 'AWS::Region'
+                    - ':lambda:path/2015-03-31/functions/'
+                    - !GetAtt 
+                      - Lambda1
+                      - Arn
+                    - /invocations
+                passthroughBehavior: when_no_match
+                httpMethod: POST
+                type: aws_proxy
+        definitions:
+          Empty: {}        
+  ApiDeployment:
+    Type: 'AWS::ApiGateway::Deployment'
+    Condition: HasFunctionName1
+    DependsOn:
+      - SampleApi
+    Properties:
+      RestApiId: !Ref SampleApi
+  ApiStageVariable:
+    Type: 'AWS::ApiGateway::Stage'
+    Condition: HasFunctionName1
+    Properties:
+      StageName: dev
+      RestApiId: !Ref SampleApi
+      DeploymentId: !Ref ApiDeployment
+      Description: !Sub '${System}-${SubSystem}-API'
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}-API'
+          Key: Name
+        - Key: SubSystem
+          Value: !Ref SubSystem
+        - Key: System
+          Value: !Ref System
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment
+  ApiDomainName:
+    Type: 'AWS::ApiGateway::DomainName'
+    Condition: HasUserFriendlyName
+    Properties:
+      DomainName: !Ref FriendlyDomainName
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      RegionalCertificateArn: "arn:aws:acm:us-east-1:084067650016:certificate/4b95c0b5-06ce-43c1-8e1c-f63860d9b141"
+      SecurityPolicy: TLS_1_2
+  ApiMapping:
+    Type: 'AWS::ApiGateway::BasePathMapping'
+    Condition: HasUserFriendlyName
+    DependsOn:
+      - SampleApi
+      - ApiStageVariable
+      - ApiDomainName
+    Properties:
+      DomainName: !Ref ApiDomainName
+      RestApiId: !Ref SampleApi
+      Stage: dev
+  ApiWebACLAssociation:
+    Type: 'AWS::WAFRegional::WebACLAssociation'
+    Condition: HasUserFriendlyName
+    DependsOn:
+      - SampleApi
+      - ApiDomainName
+      - ApiMapping
+    Properties:
+      ResourceArn: !Sub 'arn:aws:apigateway:${AWS::Region}::/restapis/${SampleApi}/stages/dev'
+      WebACLId: 6afbb7b0-8cac-42ec-97e1-8a66f337da96
+  SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Condition: HasRedisAuthToken
+    Properties:
+      GroupDescription: Security Group for Replication Group
+      GroupName: !Sub 'SG-DEV-${System}-${SubSystem}-Redis-Cluster'
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 6379
+          ToPort: 6379
+          IpProtocol: tcp
+      VpcId: !FindInMap 
+        - SystemMapping
+        - !Ref System
+        - VpcId
+  SubnetGroup:
+    Type: 'AWS::ElastiCache::SubnetGroup'
+    Condition: HasRedisAuthToken
+    Properties:
+      CacheSubnetGroupName: !Sub '${System}-${SubSystem}-Private-Redis'
+      Description: Application cache with Redis on private subnets
+      SubnetIds:
+        - subnet-14fff670
+        - subnet-90705ccd
+        - subnet-c9250be6
+  ReplicationGroup:
+    Type: 'AWS::ElastiCache::ReplicationGroup'
+    Condition: HasRedisAuthToken
+    Properties:
+      ReplicationGroupId: !Sub '${System}-${SubSystem}'
+      ReplicationGroupDescription: !Sub '${System}-${SubSystem}'
+      AutomaticFailoverEnabled: 'false'
+      CacheNodeType: cache.t2.micro
+      AtRestEncryptionEnabled: 'true'
+      TransitEncryptionEnabled: 'true'
+      CacheSubnetGroupName: !Ref SubnetGroup
+      Engine: redis
+      AuthToken: !Ref AuthToken
+      KmsKeyId: !Ref KMSArn
+      NumCacheClusters: 1
+      Port: 6379
+      PreferredMaintenanceWindow: 'sun:00:00-sun:04:00'
+      SecurityGroupIds:
+        - !GetAtt 
+          - SecurityGroup
+          - GroupId
+      SnapshotRetentionLimit: 0
+      Tags:
+        - Value: !Sub '${System}-${SubSystem}'
+          Key: Name
+        - Value: !Ref System
+          Key: System
+        - Value: !Ref SubSystem
+          Key: SubSystem
+        - Value: !Ref RevenueStream
+          Key: RevenueStream
+        - Value: Development
+          Key: Environment        
+
+  DnsRecord:
+    Type: AWS::Route53::RecordSet
+    Condition: HasUserFriendlyName    
+    DependsOn:
+      - SampleApi
+      - ApiDomainName
+      - ApiMapping
+    Properties:
+      HostedZoneName: !Ref 'HostedZoneName'
+      Name: !Ref FriendlyDomainName
+      Type: CNAME
+      TTL: '900'
+      ResourceRecords: 
+      - !GetAtt [ApiDomainName, RegionalDomainName]          
+      
+Outputs:
+  ApiGatewayRestApiId:
+    Condition: HasFunctionName1
+    Value: !Ref SampleApi
+    Export:
+      Name: !Sub '${System}-${SubSystem}-RestApiId'
